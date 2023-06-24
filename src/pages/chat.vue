@@ -21,14 +21,16 @@
       <div class="q-pa-md row justify-center">
         <div style="width: 100%; max-width: 400px">
           <!-- <div v-for="msg in msgHistory" :key="msg.id">
-            {{ msg[userType].email }}
+            {{ msg.Distributor }}
           </div> -->
 
           <q-chat-message
             v-for="(msg, index) in msgHistory"
             :key="index"
             :name="
-              msg.Distributor ? msg.Distributor.name : msg.Wirehouse_owner.name
+              msg.Distributor
+                ? msg.Distributor?.name_organisation
+                : msg.Wirehouse_owner?.name_organisation
             "
             :text="[msg.message]"
             :sent="msg[userType]?.email == userEmail"
@@ -117,9 +119,9 @@ const submit = () => {
   };
   console.log(msg);
   // TODO доделать!!
-  // socket.emit("postMsgOnServer", msg);
+  socket.emit("postMsgOnServer", msg);
 
-  // inputMsg.value = "";
+  inputMsg.value = "";
 };
 
 getRooms().then((rooms) => {
@@ -148,12 +150,9 @@ const createChat = () => {
 };
 
 socket.on("message", (message) => {
-  // if (!msgHistory.value[message.roomId]) {
-  //   msgHistory.value[message.roomId] = [message];
-  // } else {
-  //   msgHistory.value[message.roomId].push(message);
-  // }
-  // console.log(msgHistory.value);
+  console.log("msgHistory", msgHistory.value);
+  console.log("message", message);
+  msgHistory.value.push(message);
 });
 
 socket.on("connect", function () {
