@@ -1,12 +1,25 @@
 const routes = [
   {
     path: '/',
+    component: () => import('layouts/AuthorizationLayout.vue'),
+    children: [
+      {
+        path: 'Enter',
+        component: () => import('components/EnterPage.vue'),
+      },
+      {
+        path: '',
+        component: () => import('components/RegisterPage.vue'),
+      },
+    ],
+  },
+
+  {
+    path: '/app',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/chat.vue') }],
   },
 
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
