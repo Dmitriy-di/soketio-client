@@ -38,18 +38,53 @@
         <input class="formInput" v-model="inputMsg" type="text" />
       </form>
     </div>
+
+    <div>
+      <q-select
+        name="role"
+        label="Выбрать пользователя"
+        v-model="userType"
+        :options="usersOption"
+      />
+      <form @submit.prevent="submitChoice" action="">
+        <input class="formInput" type="submit" />
+      </form>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { getUsers } from "../services/index";
 
 const { io } = require("socket.io-client");
 const socket = io("http://localhost:3001");
 const roomId = ref("1");
 const inputMsg = ref();
-
+const userType = ref("");
 const msgHistory = ref([]);
+
+const usersOption = ref([]);
+
+if (localStorage.getItem("userType") === "distributor") {
+  getUsers("WirehouseOwner").then((res) => {
+    res.forEach((el) => {
+      usersOption.value.push({
+        label: el.name_organisation,
+        value: el.name_organisation,
+      });
+    });
+  });
+} else {
+  getUsers("Distributor").then((res) => {
+    res.forEach((el) => {
+      usersOption.value.push({
+        label: el.name_organisation,
+        value: el.name_organisation,
+      });
+    });
+  });
+}
 
 const submit = () => {
   socket.emit("postMsgOnServer", {

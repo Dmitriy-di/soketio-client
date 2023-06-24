@@ -87,6 +87,8 @@ export default defineComponent({
           console.log(111, resAuth);
 
           localStorage.setItem("token", resAuth.accessToken);
+          localStorage.setItem("email", resAuth.email);
+          localStorage.setItem("userType", resAuth.userType);
 
           EnterReset();
           router.push("/app");

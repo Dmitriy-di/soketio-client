@@ -87,7 +87,7 @@ export default defineComponent({
       try {
         createUser(
           {
-            name: form.value.name,
+            name_organisation: form.value.name,
             email: form.value.email,
             userType: form.value.userType.value,
             password: form.value.password,
