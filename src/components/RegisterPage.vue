@@ -69,7 +69,7 @@ export default defineComponent({
     const code = ref("");
     const name = ref("");
     const surname = ref("");
-    const $router = useRouter();
+    const router = useRouter();
 
     const form = ref({
       name: "",
@@ -93,7 +93,9 @@ export default defineComponent({
             password: form.value.password,
           },
           "signUp"
-        );
+        ).then((res) => {
+          router.push("/Enter");
+        });
       } catch (err) {
         console.log(err);
       }

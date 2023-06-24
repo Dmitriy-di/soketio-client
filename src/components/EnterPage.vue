@@ -21,6 +21,14 @@
           :rules="[(val) => (val && val.length > 0) || 'Введите что нибудь']"
         >
         </q-input>
+
+        <q-select
+          name="role"
+          label="Роль пользователя"
+          v-model="userType"
+          :options="roleOptions"
+        />
+
         <p class="error" v-if="error">{{ error }}</p>
         <div class="q-mt-md">
           <q-btn label="Отправить" type="submit" color="primary" />
@@ -44,7 +52,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-// import { enter } from "../services/enter";
+import { enter } from "../services/enter";
 
 export default defineComponent({
   setup() {
@@ -52,21 +60,26 @@ export default defineComponent({
     const email = ref("");
     const password = ref("");
     const error = ref("");
-
+    const userType = ref({ label: "distributor", value: "distributor" });
     const EnterReset = () => {
       email.value = "";
       password.value = "";
     };
+
+    const roleOptions = ref([
+      { label: "distributor", value: "distributor" },
+      { label: "wirehouse_owner", value: "wirehouse_owner" },
+    ]);
 
     const EnterSubmit = async () => {
       console.log("email", email.value);
       console.log("password", password.value);
 
       let resAuth = null;
-
       enter({
         email: email.value,
         password: password.value,
+        userType: userType.value.value,
       })
         .then((res) => {
           resAuth = res;
@@ -74,7 +87,6 @@ export default defineComponent({
           console.log(111, resAuth);
 
           localStorage.setItem("token", resAuth.accessToken);
-          localStorage.setItem("moderator", resAuth.moderator);
 
           EnterReset();
           router.push("/app");
@@ -86,9 +98,11 @@ export default defineComponent({
     };
 
     return {
+      userType,
       EnterSubmit,
       email,
       password,
+      roleOptions,
       error,
       EnterReset,
     };
