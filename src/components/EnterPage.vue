@@ -60,15 +60,15 @@ export default defineComponent({
     const email = ref("");
     const password = ref("");
     const error = ref("");
-    const userType = ref({ label: "distributor", value: "distributor" });
+    const userType = ref({ label: "Distributor", value: "Distributor" });
     const EnterReset = () => {
       email.value = "";
       password.value = "";
     };
 
     const roleOptions = ref([
-      { label: "distributor", value: "distributor" },
-      { label: "wirehouse_owner", value: "wirehouse_owner" },
+      { label: "Distributor", value: "Distributor" },
+      { label: "Wirehouse_owner", value: "Wirehouse_owner" },
     ]);
 
     const EnterSubmit = async () => {
@@ -84,11 +84,12 @@ export default defineComponent({
         .then((res) => {
           resAuth = res;
 
-          console.log(111, resAuth);
+          console.log("resAuth", resAuth);
 
           localStorage.setItem("token", resAuth.accessToken);
           localStorage.setItem("email", resAuth.email);
-          localStorage.setItem("userType", resAuth.userType);
+          localStorage.setItem("userRole", resAuth.userType);
+          localStorage.setItem("userId", resAuth.userId);
 
           EnterReset();
           router.push("/app");

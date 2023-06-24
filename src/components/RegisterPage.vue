@@ -74,13 +74,13 @@ export default defineComponent({
     const form = ref({
       name: "",
       email: "",
-      userType: { label: "distributor", value: "distributor" },
+      userType: { label: "Distributor", value: "Distributor" },
       password: "",
     });
 
     const roleOptions = ref([
-      { label: "distributor", value: "distributor" },
-      { label: "wirehouse_owner", value: "wirehouse_owner" },
+      { label: "Distributor", value: "Distributor" },
+      { label: "Wirehouse_owner", value: "Wirehouse_owner" },
     ]);
 
     const registerSubmit = () => {
