@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h4>Пользователей онлайн: {{ usersOnline }}</h4>
     <div>
       <q-btn-toggle
         v-model="roomId"
@@ -84,6 +85,7 @@ const usersOption = ref([]);
 const roomsOptions = ref([]);
 const nameNewChat = ref();
 const userEmail = ref(localStorage.getItem("email"));
+let usersOnline = ref(0);
 let chatNubmer = ref();
 
 // if (localStorage.getItem("userType") === "distributor") {
@@ -178,6 +180,10 @@ socket.on("setNewRoom", (room) => {
 
 socket.on("disconnect", function () {
   console.log("Disconnected!");
+});
+
+socket.on("countUsersOnline", (countUsersOnline) => {
+  usersOnline.value = countUsersOnline / 2;
 });
 
 watch(roomId, () => {
