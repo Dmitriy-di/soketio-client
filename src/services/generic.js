@@ -8,6 +8,7 @@ export const request = async ({ url, method, data = {} }) => {
   const headers = {
     Authorization: `Bearer ${token}`, // Добавление токена в заголовок Authorization
     'Content-Type': 'application/json',
+    nameRoom: data?.nameRoom,
   }
 
   const options = {

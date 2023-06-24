@@ -10,12 +10,7 @@
         rounded
         unelevated
         glossy
-        :options="[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' },
-        ]"
+        :options="chatsOptions"
       />
     </div>
 
@@ -46,25 +41,29 @@
         v-model="userType"
         :options="usersOption"
       />
+
       <form @submit.prevent="submitChoice" action="">
-        <input class="formInput" type="submit" />
+        <button type="submit">Создать чат</button>
       </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { getUsers } from "../services/index";
+import { getChatHistory } from "../services/index";
 
 const { io } = require("socket.io-client");
 const socket = io("http://localhost:3001");
-const roomId = ref("1");
+const roomId = ref(1);
 const inputMsg = ref();
 const userType = ref("");
 const msgHistory = ref([]);
-
 const usersOption = ref([]);
+const chatsOptions = ref([{ label: "One", value: 1 }]);
+
+let chatNubmer = ref(chatsOptions.value.length);
 
 if (localStorage.getItem("userType") === "distributor") {
   getUsers("WirehouseOwner").then((res) => {
@@ -95,6 +94,18 @@ const submit = () => {
   inputMsg.value = "";
 };
 
+const submitChoice = () => {
+  chatNubmer.value++;
+  chatsOptions.value.push({
+    label: userType.value?.value,
+    value: chatNubmer.value,
+  });
+  // socket.emit("postMsgOnServer", {
+  //   message: inputMsg.value,
+  //   roomId: roomId.value,
+  // });
+};
+
 socket.on("message", (message) => {
   if (!msgHistory.value[message.roomId]) {
     msgHistory.value[message.roomId] = [message];
@@ -115,6 +126,12 @@ socket.on("connect", function () {
 
 socket.on("disconnect", function () {
   console.log("Disconnected!");
+});
+
+watch(roomId, () => {
+  getChatHistory("room_" + roomId.value).then((res) => {
+    console.log(res);
+  });
 });
 </script>
 

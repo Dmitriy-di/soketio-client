@@ -1,6 +1,8 @@
 // const getModules = require('../services/modules.service')
-const getUsers = require('./user')
+const users = require('./user')
+const chatHistory = require('./chatHistory')
 
 module.exports = {
-  ...getUsers,
+  ...users,
+  ...chatHistory,
 }
